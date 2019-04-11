@@ -5,17 +5,18 @@ let fs = require('fs');
 
 
 
-let ctr = 1;
+let ctr = 10;
 let randomWord = function(){
     let data = fs.readFileSync('movies.txt', 'utf8');
     var lines = data.split('\n');
     return lines[Math.floor(Math.random()*lines.length)];
 }
 
-console.log(chalk.bold.cyan('Welcome to the Constructor Word Guess Game!\n'));
+console.log(chalk.bold.cyanBright('Welcome to the Constructor Word Guess Game!'));
+console.log(chalk.cyan('You get 10 chances to guess the movie title.\n'));
 
 function run(){
-    if (ctr === 1) {
+    if (ctr === 10) {
         random = randomWord();
         w = new Word(random);
         console.log(w.wordToStr() + '\n');
@@ -30,27 +31,34 @@ function run(){
         .then(answers => {
             if (answers.guess !== '') {
                 if (answers.guess.length > 1) {
-                    console.log(chalk.bold.yellow('\nNo no no - you can only enter one letter'));
+                    console.log(chalk.yellow('\nNo no no - you can only enter one letter'));
                 } else {
 
-                    let message = w.charToGuess(answers.guess);
+                    let message = w.guessCharacter(answers.guess);
                     if (message == 'CORRECT!') {
-                        console.log('\n' + chalk.bold.green(message) + '\n');
+                        console.log('\n' + chalk.green(message) + '\n');
                     } else {
-                        console.log('\n' + chalk.bold.red(message) + '\n');
+                        console.log('\n' + chalk.red(message) + '\n');
                     }
-                    console.log(chalk.bold.blueBright('\n' + w.getWord()) + '\n');
+                    console.log(chalk.yellow((ctr-1) + ' guesses left') + '\n');
+                    
+                    console.log(chalk.bold.blueBright(w.getWord()) + '\n');
                 }
             } else {
-                console.log(chalk.bold.yellow('\nAt least enter something'));
+                console.log(chalk.yellow('\nAt least enter something'));
             }
             if (w.allGuessed()) {
                 console.log(chalk.bold.blueBright('========================\n'));
                 console.log(chalk.bold.cyanBright('       YOU WIN!!! \n'));
                 console.log(chalk.bold.blueBright('========================\n'));
                 wantToPlayAgain();
+            } else if (ctr < 1){
+                console.log(chalk.bold.redBright('========================\n'));
+                console.log(chalk.bold.redBright('      YOU LOSE!!! \n'));
+                console.log(chalk.bold.redBright('========================\n'));
+                wantToPlayAgain();
             } else {
-                ctr++;
+                ctr--;
                 run();
             }
         });

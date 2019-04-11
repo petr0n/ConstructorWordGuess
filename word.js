@@ -2,11 +2,16 @@ let Letter = require('./letter');
 let l = new Letter();
 
 function Word(w){
+
     this.wordArr = w.split('');
     this.isGuessed = false;
     this.totalChars = 0;
+    this.wordLength = this.wordArr.join('').replace(/\s/g, '').length;
     
     this.wordToStr = function(){
+        try {
+
+        
         hiddenWord = [];
         this.wordArr.map(function(char, i){
             if (char == ' ') { // space char
@@ -18,10 +23,14 @@ function Word(w){
                 this.totalChars++;
             }
         });
+    } catch(err){
+        console.log(err);
+    }
         return hiddenWord.join(' ');
     };
-
-    this.charToGuess = function(char1){
+    
+    // character guess
+    this.guessCharacter = function(char1){
         this.totalGuesses++;
         let message = 'INCORRECT!';
         this.wordArr.map(function(char, i){
@@ -33,6 +42,7 @@ function Word(w){
         return message;
     };
 
+    // get word
     this.getWord = function(){
         hiddenWord = [];
         this.wordArr.map(function(char, i){
@@ -45,16 +55,17 @@ function Word(w){
         return hiddenWord.join(' ');
     };
 
+    // has the word been guess?
     this.allGuessed = function(){
         let numGuessed = 0;
-        let cleanWord = this.wordArr.join('').replace(/\s/g, '');
         this.wordArr.map(function(char, i){ 
             if (Object.keys(this['l' + i]).length > 1 && this['l' + i].isGuessed) {
                 numGuessed++;
-            } 
+            }
         });
-        return numGuessed == cleanWord.length ? true : false;
+        return numGuessed == this.wordLength ? true : false;
     }
+
 }
 
 module.exports = Word;
