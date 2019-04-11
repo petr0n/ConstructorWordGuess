@@ -9,9 +9,6 @@ function Word(w){
     this.wordLength = this.wordArr.join('').replace(/\s/g, '').length;
     
     this.wordToStr = function(){
-        try {
-
-        
         hiddenWord = [];
         this.wordArr.map(function(char, i){
             if (char == ' ') { // space char
@@ -23,9 +20,6 @@ function Word(w){
                 this.totalChars++;
             }
         });
-    } catch(err){
-        console.log(err);
-    }
         return hiddenWord.join(' ');
     };
     
