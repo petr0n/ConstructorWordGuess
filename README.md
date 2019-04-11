@@ -18,6 +18,7 @@ This app uses the following packages
 * Chalk - styles console log 
 * fs - reads file
 
+--------
 
-##See it in action!
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+## See it in action!
+![alt text](https://raw.githubusercontent.com/petr0n/ConstructorWordGuess/master/constructor-word-guess.gif "Logo Title Text 1")
