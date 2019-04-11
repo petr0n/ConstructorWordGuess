@@ -3,33 +3,58 @@ let l = new Letter();
 
 function Word(w){
     this.wordArr = w.split('');
+    this.isGuessed = false;
+    this.totalChars = 0;
+    
     this.wordToStr = function(){
-        let hiddenWord = [];
-        this.wordArr.map(function(char){
-            l = new Letter(char);
-            hiddenWord.push(l.guess());
+        hiddenWord = [];
+        this.wordArr.map(function(char, i){
+            if (char == ' ') { // space char
+                this['l' + i] = ' ';
+                hiddenWord.push(' ');
+            } else {
+                this['l' + i] = new Letter(char);
+                hiddenWord.push(this['l' + i].guess());
+                this.totalChars++;
+            }
         });
-        console.log(l);
         return hiddenWord.join(' ');
     };
-    this.charToGuess = function(char){
-        this.wordArr.map(function(char1){
-            if (char === char1) {
-                l.isGuessed = true;
-            }
-            l.update(char);
-        });
-    }
 
+    this.charToGuess = function(char1){
+        this.totalGuesses++;
+        let message = 'INCORRECT!';
+        this.wordArr.map(function(char, i){
+            if (char1.toLowerCase() === char.toLowerCase()){
+                this['l' + i].updateGuess(char);
+                message = 'CORRECT!';
+            }
+        });
+        return message;
+    };
+
+    this.getWord = function(){
+        hiddenWord = [];
+        this.wordArr.map(function(char, i){
+            if (Object.keys(this['l' + i]).length > 1) {
+                hiddenWord.push(this['l' + i].guess());
+            } else {
+                hiddenWord.push(' ');                
+            }
+        });
+        return hiddenWord.join(' ');
+    };
+
+    this.allGuessed = function(){
+        let numGuessed = 0;
+        let cleanWord = this.wordArr.join('').replace(/\s/g, '');
+        this.wordArr.map(function(char, i){ 
+            if (Object.keys(this['l' + i]).length > 1 && this['l' + i].isGuessed) {
+                numGuessed++;
+            } 
+        });
+        return numGuessed == cleanWord.length ? true : false;
+    }
 }
 
 module.exports = Word;
-
-/*
-An array of new Letter objects representing the letters of the underlying word
-A function that returns a string representing the word. This should call the function on each letter object (the first function defined in Letter.js) that displays the character or an underscore and concatenate those together.
-
-A function that takes a character as an argument and calls the guess function on each letter object (the second function defined in Letter.js)
-
-
-*/
